@@ -6,7 +6,7 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, Sid
 import { useIsMobile } from '@/hooks/use-mobile';
 import { type NavItem, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { Building, LayoutGrid, Shield, Users } from 'lucide-react';
+import { Briefcase, Building, LayoutGrid, Shield, Users } from 'lucide-react';
 import { route } from 'ziggy-js';
 
 const adminNavItems: NavItem[] = [
@@ -29,6 +29,11 @@ const adminNavItems: NavItem[] = [
         title: 'Permissions',
         href: route('permissions.index'),
         icon: Shield,
+    },
+    {
+        title: 'Positions',
+        href: route('positions.index'),
+        icon: Briefcase,
     },
     {
         title: 'Departments',

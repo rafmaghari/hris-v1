@@ -9,6 +9,8 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\PositionController;
+use App\Http\Controllers\DepartmentController;
 
 // Admin routes with caravea_admin role
 Route::prefix('admin')->middleware(['auth', 'verified', 'role:super_admin'])->group(function () {
@@ -33,6 +35,10 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role:super_admin'])->gr
     Route::resource('companies', CompanyController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('permissions', PermissionController::class);
+    Route::resource('positions', PositionController::class);
+    Route::resource('departments', DepartmentController::class);
+    Route::resource('users', UserController::class);
+
 
     // Menu Builder routes
     Route::get('menu-builder', [MenuBuilderController::class, 'index'])

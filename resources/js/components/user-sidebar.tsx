@@ -4,7 +4,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { Briefcase, Building, Clock, LayoutGrid, Users } from 'lucide-react';
+import { Clock, LayoutGrid } from 'lucide-react';
 import { route } from 'ziggy-js';
 import { NavGroup } from './nav-main';
 
@@ -31,30 +31,16 @@ const adminNavItems: NavItem[] = [
         href: route('dashboard'),
         icon: LayoutGrid,
     },
-    {
-        title: 'Positions',
-        href: route('positions.index'),
-        icon: Briefcase,
-    },
-    {
-        title: 'Departments',
-        href: route('departments.index'),
-        icon: Building,
-    },
+
     {
         title: 'Overtime Requests',
         href: route('overtime-requests.index'),
         icon: Clock,
     },
     {
-        title: 'Overtime Pending for Approval',
+        title: 'Overtime for Approval',
         href: route('overtime-requests.pending-approvals'),
         icon: Clock,
-    },
-    {
-        title: 'Users',
-        href: route('users.index'),
-        icon: Users,
     },
 ];
 

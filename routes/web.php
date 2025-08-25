@@ -22,11 +22,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('app')->group(function () {
         Route::get('dashboard', [DashboardController::class, 'index'])->name('app.dashboard');
 
-        Route::resource('groups', GroupController::class);
-        Route::resource('positions', PositionController::class);
-        Route::resource('departments', DepartmentController::class);
-        Route::resource('users', UserController::class);
-
+     
         // Add other regular user routes here
     });
 

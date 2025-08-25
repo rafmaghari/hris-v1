@@ -14,6 +14,7 @@ class OvertimeRequestController extends Controller
     public function index(): Response
     {
         $overtimeRequests = OvertimeRequest::with(['user', 'approver'])
+            ->where('user_id', Auth::id())
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
