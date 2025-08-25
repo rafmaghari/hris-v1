@@ -1,0 +1,176 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+@import 'tailwindcss';
+
+@plugin 'tailwindcss-animate';
+
+@source '../views';
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --radius-lg: var(--radius);
+    --radius-md: calc(var(--radius) - 2px);
+    --radius-sm: calc(var(--radius) - 4px);
+
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+
+    --color-destructive: var(--destructive);
+    --color-destructive-foreground: var(--destructive-foreground);
+
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+
+    --color-chart-1: var(--chart-1);
+    --color-chart-2: var(--chart-2);
+    --color-chart-3: var(--chart-3);
+    --color-chart-4: var(--chart-4);
+    --color-chart-5: var(--chart-5);
+
+    --color-sidebar: var(--sidebar);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-ring: var(--sidebar-ring);
+
+    /* New complementary color */
+    --color-complementary: var(--complementary);
+    --color-complementary-foreground: var(--complementary-foreground);
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+    html {
+        font-size: 16px;
+        /* This is the current base font size */
+    }
+
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-gray-200, currentColor);
+    }
+}
+
+:root {
+    /* Clean Modern Theme - Light Mode */
+    --background: #ffffff; /* White */
+    --foreground: #000000; /* Black */
+    --card: #ffffff; /* White */
+    --card-foreground: #000000; /* Black */
+    --popover: #ffffff; /* White */
+    --popover-foreground: #000000; /* Black */
+    --primary: #e1f4f3; /* Light Teal */
+    --primary-foreground: #000000; /* Black */
+    --secondary: #706c61; /* Grayish Brown */
+    --secondary-foreground: #ffffff; /* White */
+    --muted: #e1f4f3; /* Light Teal */
+    --muted-foreground: #706c61; /* Grayish Brown */
+    --accent: #706c61; /* Grayish Brown */
+    --accent-foreground: #ffffff; /* White */
+    --destructive: #ff4d4d; /* Red */
+    --destructive-foreground: #ffffff; /* White */
+    --border: #e1f4f3; /* Light Teal */
+    --input: #e1f4f3; /* Light Teal */
+    --ring: #706c61; /* Grayish Brown */
+    --chart-1: #e1f4f3; /* Light Teal */
+    --chart-2: #706c61; /* Grayish Brown */
+    --chart-3: #000000; /* Black */
+    --chart-4: #ffffff; /* White */
+    --chart-5: #f0f0f0; /* Light Gray */
+    --radius: 0.625rem;
+    /* Complementary color */
+    --complementary: #706c61; /* Grayish Brown */
+    --complementary-foreground: #ffffff; /* White */
+
+    /* Sidebar specific colors */
+    --sidebar: #000000; /* Black */
+    --sidebar-foreground: #ffffff; /* White */
+    --sidebar-primary: #e1f4f3; /* Light Teal */
+    --sidebar-primary-foreground: #000000; /* Black */
+    --sidebar-accent: rgba(225, 244, 243, 0.15); /* Translucent Light Teal */
+    --sidebar-accent-foreground: #e1f4f3; /* Light Teal */
+    --sidebar-border: #706c61; /* Grayish Brown */
+    --sidebar-ring: #e1f4f3; /* Light Teal */
+}
+
+.dark {
+    /* Clean Modern Theme - Dark Mode */
+    --background: #000000; /* Black */
+    --foreground: #ffffff; /* White */
+    --card: #1a1a1a; /* Dark Gray */
+    --card-foreground: #ffffff; /* White */
+    --popover: #1a1a1a; /* Dark Gray */
+    --popover-foreground: #ffffff; /* White */
+    --primary: #e1f4f3; /* Light Teal */
+    --primary-foreground: #000000; /* Black */
+    --secondary: #706c61; /* Grayish Brown */
+    --secondary-foreground: #ffffff; /* White */
+    --muted: #2a2a2a; /* Dark Gray */
+    --muted-foreground: #e1f4f3; /* Light Teal */
+    --accent: #e1f4f3; /* Light Teal */
+    --accent-foreground: #000000; /* Black */
+    --destructive: #ff4d4d; /* Red */
+    --destructive-foreground: #ffffff; /* White */
+    --border: #706c61; /* Grayish Brown */
+    --input: #2a2a2a; /* Dark Gray */
+    --ring: #e1f4f3; /* Light Teal */
+    /* Complementary color */
+    --complementary: #e1f4f3; /* Light Teal */
+    --complementary-foreground: #000000; /* Black */
+
+    /* Sidebar specific colors for dark mode */
+    --sidebar: #000000; /* Black */
+    --sidebar-foreground: #ffffff; /* White */
+    --sidebar-primary: #e1f4f3; /* Light Teal */
+    --sidebar-primary-foreground: #000000; /* Black */
+    --sidebar-accent: rgba(225, 244, 243, 0.2); /* Translucent Light Teal */
+    --sidebar-accent-foreground: #ffffff; /* White */
+    --sidebar-border: #706c61; /* Grayish Brown */
+    --sidebar-ring: #e1f4f3; /* Light Teal */
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+
+    body {
+        @apply bg-background text-foreground;
+    }
+}

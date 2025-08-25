@@ -1,0 +1,24 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use App\Enums\Status;
+
+class Department extends Model
+{
+    protected $fillable = [
+        'name',
+        'description',
+        'status',
+    ];
+
+    protected $casts = [
+        'status' => Status::class,
+    ];
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+}
