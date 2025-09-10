@@ -130,6 +130,7 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             DepartmentSeeder::class,
             PositionSeeder::class,
+            LeaveTypeSeeder::class,
         ]);
 
         // Ensure super_admin has all permissions including the ones from PermissionSeeder

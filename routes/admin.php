@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\LeaveTypeController;
 
 // Admin routes with caravea_admin role
 Route::prefix('admin')->middleware(['auth', 'verified', 'role:super_admin'])->group(function () {
@@ -37,6 +38,7 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role:super_admin'])->gr
     Route::resource('permissions', PermissionController::class);
     Route::resource('positions', PositionController::class);
     Route::resource('departments', DepartmentController::class);
+    Route::resource('leave-types', LeaveTypeController::class);
     Route::resource('users', UserController::class);
 
 

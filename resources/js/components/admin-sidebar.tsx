@@ -6,7 +6,7 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, Sid
 import { useIsMobile } from '@/hooks/use-mobile';
 import { type NavItem, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { Briefcase, Building, LayoutGrid, Shield, Users } from 'lucide-react';
+import { Briefcase, Building, Calendar, LayoutGrid, Shield, Users } from 'lucide-react';
 import { route } from 'ziggy-js';
 
 const adminNavItems: NavItem[] = [
@@ -39,6 +39,11 @@ const adminNavItems: NavItem[] = [
         title: 'Departments',
         href: route('departments.index'),
         icon: Building,
+    },
+    {
+        title: 'Leave Types',
+        href: route('leave-types.index'),
+        icon: Calendar,
     },
 ];
 

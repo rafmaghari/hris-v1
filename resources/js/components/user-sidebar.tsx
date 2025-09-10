@@ -2,9 +2,10 @@ import ApplicationLogo from '@/components/applicationLogo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
-import { type NavItem } from '@/types';
-import { Link } from '@inertiajs/react';
-import { Clock, LayoutGrid } from 'lucide-react';
+import { hasRole } from '@/lib/roles';
+import { type NavItem, type SharedData } from '@/types';
+import { Link, usePage } from '@inertiajs/react';
+import { CalendarClock, Clock, LayoutGrid } from 'lucide-react';
 import { route } from 'ziggy-js';
 import { NavGroup } from './nav-main';
 
@@ -25,26 +26,34 @@ interface MenuStructure {
     };
 }
 
-const adminNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        href: route('dashboard'),
-        icon: LayoutGrid,
-    },
-
-    {
-        title: 'Overtime Requests',
-        href: route('overtime-requests.index'),
-        icon: Clock,
-    },
-    {
-        title: 'Overtime for Approval',
-        href: route('overtime-requests.pending-approvals'),
-        icon: Clock,
-    },
-];
-
 export function UserSidebar() {
+    const { overtimeCounts } = usePage<SharedData>().props;
+
+    const adminNavItems: NavItem[] = [
+        {
+            title: 'Dashboard',
+            href: route('dashboard'),
+            icon: LayoutGrid,
+        },
+        {
+            title: 'My Overtime Requests',
+            href: route('overtime-requests.index'),
+            icon: Clock,
+            badge: overtimeCounts?.myPendingRequests && overtimeCounts.myPendingRequests > 0 ? overtimeCounts.myPendingRequests : undefined,
+        },
+        // Only show "Overtime for Approval" if user is a manager or has pending approvals
+        ...(hasRole('manager') || (overtimeCounts?.pendingApprovals && overtimeCounts.pendingApprovals > 0)
+            ? [
+                  {
+                      title: 'Overtime for Approval',
+                      href: route('overtime-requests.pending-approvals'),
+                      icon: CalendarClock,
+                      badge: overtimeCounts?.pendingApprovals && overtimeCounts.pendingApprovals > 0 ? overtimeCounts.pendingApprovals : undefined,
+                  },
+              ]
+            : []),
+    ];
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>

@@ -1,3 +1,4 @@
+import { Badge } from '@/components/ui/badge';
 import { SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
@@ -28,6 +29,16 @@ export function NavGroup({ items = [], title = '' }: { items: NavItem[]; title: 
                                 <Link href={item.href} prefetch>
                                     {item.icon && <item.icon />}
                                     <span>{item.title}</span>
+                                    {item.badge && (
+                                        <Badge
+                                            variant="default"
+                                            className={`ml-auto h-5 w-5 shrink-0 items-center justify-center rounded-full text-xs ${
+                                                isActive ? 'bg-gray-500 text-white' : ''
+                                            }`}
+                                        >
+                                            {item.badge}
+                                        </Badge>
+                                    )}
                                 </Link>
                             </SidebarMenuButton>
                         </SidebarMenuItem>

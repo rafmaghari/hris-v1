@@ -136,7 +136,7 @@ export default function PendingApprovals({ overtimeRequests }: Props) {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Pending Overtime Approvals" />
+            <Head title="Overtime Approvals" />
 
             <div className="my-4 flex items-center justify-between px-5">
                 <h1 className="text-2xl font-semibold">Pending Overtime Approvals</h1>

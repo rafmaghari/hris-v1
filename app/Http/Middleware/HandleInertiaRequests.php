@@ -3,6 +3,9 @@
 namespace App\Http\Middleware;
 
 use App\Actions\User\GetUserAccessAction;
+use App\Models\OvertimeRequest;
+use App\Models\User;
+use App\Enums\OvertimeStatus;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
@@ -38,9 +41,26 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         $userAccess = [];
+        $overtimeCounts = null;
 
         if ($request->user()) {
             $userAccess = (new GetUserAccessAction)->execute($request->user());
+            
+            // Calculate overtime counts for the authenticated user
+            $myPendingRequests = OvertimeRequest::where('user_id', $request->user()->id)
+                ->where('status', OvertimeStatus::PENDING)
+                ->count();
+
+            // Get users where the current user is their manager
+            $subordinateIds = User::where('manager_id', $request->user()->id)->pluck('id');
+            $pendingApprovals = OvertimeRequest::whereIn('user_id', $subordinateIds)
+                ->where('status', OvertimeStatus::PENDING)
+                ->count();
+
+            $overtimeCounts = [
+                'myPendingRequests' => $myPendingRequests,
+                'pendingApprovals' => $pendingApprovals,
+            ];
         }
 
         return [
@@ -62,6 +82,7 @@ class HandleInertiaRequests extends Middleware
                 'location' => $request->url(),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'overtimeCounts' => $overtimeCounts,
         ];
     }
 }

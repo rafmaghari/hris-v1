@@ -20,6 +20,7 @@ export interface NavItem {
     href: string;
     icon?: LucideIcon | null;
     isActive?: boolean;
+    badge?: string | number;
 }
 
 export interface SharedData {
@@ -28,6 +29,10 @@ export interface SharedData {
     auth: Auth;
     ziggy: Config & { location: string };
     sidebarOpen: boolean;
+    overtimeCounts?: {
+        myPendingRequests: number;
+        pendingApprovals: number;
+    };
     [key: string]: unknown;
 }
 
