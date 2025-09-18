@@ -30,8 +30,9 @@ interface Props {
         manager_id: number | null;
         date_hired: string | null;
         employment_type: string | null;
-        status: string | null;
+        status: number;
         end_at: string | null;
+        roles: number[];
     };
     positions: Array<{ id: number; name: string }>;
     departments: Array<{ id: number; name: string }>;

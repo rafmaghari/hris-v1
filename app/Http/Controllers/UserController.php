@@ -1,19 +1,16 @@
 <?php
-
 namespace App\Http\Controllers;
 
+use App\Enums\EmploymentType;
+use App\Enums\Status;
 use App\Http\Requests\UserRequest;
 use App\Models\Company;
 use App\Models\Department;
 use App\Models\Platform;
 use App\Models\Position;
-use App\Models\PlatformCompanyUserPermission;
-use App\Models\PlatformCompanyUserRole;
 use App\Models\User;
 use App\Queries\UserRolePermissionQuery;
 use App\Utils\Constant;
-use App\Enums\EmploymentType;
-use App\Enums\Status;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -31,7 +28,7 @@ class UserController extends Controller
     public function index(): Response
     {
         return Inertia::render('Users/Index', [
-            'users' => UserRolePermissionQuery::getUsersWithRoles(),
+            'users'   => UserRolePermissionQuery::getUsersWithRoles(),
             'filters' => ['filter' => request()->get('filter') ?? ''],
         ]);
     }
@@ -42,17 +39,17 @@ class UserController extends Controller
     public function create(): Response
     {
         return Inertia::render('Users/Create', [
-            'roles' => Role::all(),
-            'positions' => Position::select('id', 'name')->get(),
-            'departments' => Department::select('id', 'name')->get(),
-            'managers' => User::select('id', 'first_name', 'last_name')
+            'roles'           => Role::all(),
+            'positions'       => Position::select('id', 'name')->get(),
+            'departments'     => Department::select('id', 'name')->get(),
+            'managers'        => User::select('id', 'first_name', 'last_name')
                 ->whereHas('roles', function ($query) {
                     $query->where('name', 'like', '%manager%');
                 })
                 ->get()
                 ->map(function ($user) {
                     return [
-                        'id' => $user->id,
+                        'id'   => $user->id,
                         'name' => $user->name,
                     ];
                 }),
@@ -62,7 +59,7 @@ class UserController extends Controller
                     'label' => ucfirst($type->value),
                 ];
             }),
-            'statuses' => collect(Status::cases())->map(function ($status) {
+            'statuses'        => collect(Status::cases())->map(function ($status) {
                 return [
                     'value' => $status->value,
                     'label' => ucfirst($status->label()),
@@ -76,7 +73,7 @@ class UserController extends Controller
      */
     public function store(UserRequest $request): RedirectResponse
     {
-        $validated = $request->validated();
+        $validated             = $request->validated();
         $validated['password'] = Hash::make($validated['password']);
 
         $user = User::create($validated);
@@ -94,13 +91,13 @@ class UserController extends Controller
      */
     public function edit(User $user): Response
     {
-        $platforms = Platform::select('id', 'name')->get();
-        $companies = Company::select('id', 'name')->get();
-        $roles = Role::select('id', 'name')->where('name', '!=', Constant::SUPER_ADMIN_ROLE)->get();
+        $platforms   = Platform::select('id', 'name')->get();
+        $companies   = Company::select('id', 'name')->get();
+        $roles       = Role::select('id', 'name')->where('name', '!=', Constant::SUPER_ADMIN_ROLE)->get();
         $permissions = Permission::select('id', 'name')->get();
-        $positions = Position::select('id', 'name')->get();
+        $positions   = Position::select('id', 'name')->get();
         $departments = Department::select('id', 'name')->get();
-        $managers = User::select('id', 'first_name', 'last_name')
+        $managers    = User::select('id', 'first_name', 'last_name')
             ->whereHas('roles', function ($query) {
                 $query->where('name', 'like', '%manager%');
             })
@@ -108,40 +105,40 @@ class UserController extends Controller
             ->get()
             ->map(function ($manager) {
                 return [
-                    'id' => $manager->id,
+                    'id'   => $manager->id,
                     'name' => $manager->name,
                 ];
             });
 
         // Add roles to user data
-        $userData = $user->toArray();
+        $userData          = $user->toArray();
         $userData['roles'] = $user->roles->pluck('id')->toArray();
 
         return Inertia::render('Users/Edit', [
-            'user' => $userData,
-            'platforms' => $platforms,
-            'companies' => $companies,
-            'roles' => $roles,
-            'permissions' => $permissions,
-            'positions' => $positions,
-            'departments' => $departments,
-            'managers' => $managers,
-            'employmentTypes' => collect(EmploymentType::cases())->map(function ($type) {
+            'user'                             => $userData,
+            'platforms'                        => $platforms,
+            'companies'                        => $companies,
+            'roles'                            => $roles,
+            'permissions'                      => $permissions,
+            'positions'                        => $positions,
+            'departments'                      => $departments,
+            'managers'                         => $managers,
+            'employmentTypes'                  => collect(EmploymentType::cases())->map(function ($type) {
                 return [
                     'value' => $type->value,
                     'label' => ucfirst($type->value),
                 ];
             }),
-            'statuses' => collect(Status::cases())->map(function ($status) {
+            'statuses'                         => collect(Status::cases())->map(function ($status) {
                 return [
                     'value' => $status->value,
                     'label' => ucfirst($status->label()),
                 ];
             }),
-            'userRolesByPlatformCompany' => UserRolePermissionQuery::getUserPlatformCompanyRoles($user),
+            'userRolesByPlatformCompany'       => UserRolePermissionQuery::getUserPlatformCompanyRoles($user),
             'userPermissionsByPlatformCompany' => UserRolePermissionQuery::getUserPlatformCompanyPermissions($user),
-            'userDirectRoles' => $user->roles->pluck('id')->toArray(),
-            'userDirectPermissions' => $user->permissions->pluck('id')->toArray(),
+            'userDirectRoles'                  => $user->roles->pluck('id')->toArray(),
+            'userDirectPermissions'            => $user->permissions->pluck('id')->toArray(),
         ]);
     }
 
@@ -189,9 +186,9 @@ class UserController extends Controller
     public function updateDirectAccess(Request $request, User $user)
     {
         $validated = $request->validate([
-            'role_ids' => ['required', 'array'],
-            'role_ids.*' => ['exists:roles,id'],
-            'permission_ids' => ['required', 'array'],
+            'role_ids'         => ['required', 'array'],
+            'role_ids.*'       => ['exists:roles,id'],
+            'permission_ids'   => ['required', 'array'],
             'permission_ids.*' => ['exists:permissions,id'],
         ]);
 
@@ -199,7 +196,7 @@ class UserController extends Controller
             DB::beginTransaction();
 
             // Get role and permission models
-            $roles = Role::whereIn('id', $validated['role_ids'])->get();
+            $roles       = Role::whereIn('id', $validated['role_ids'])->get();
             $permissions = Permission::whereIn('id', $validated['permission_ids'])->get();
 
             // Sync roles and permissions using Spatie methods
@@ -217,10 +214,10 @@ class UserController extends Controller
             DB::rollBack();
 
             if ($request->wantsJson()) {
-                return response()->json(['success' => false, 'message' => 'Failed to update direct access: '.$e->getMessage()], 500);
+                return response()->json(['success' => false, 'message' => 'Failed to update direct access: ' . $e->getMessage()], 500);
             }
 
-            return redirect()->back()->with('error', 'Failed to update direct access: '.$e->getMessage());
+            return redirect()->back()->with('error', 'Failed to update direct access: ' . $e->getMessage());
         }
     }
 }

@@ -33,6 +33,10 @@ export interface SharedData {
         myPendingRequests: number;
         pendingApprovals: number;
     };
+    leaveRequestCounts?: {
+        myPendingRequests: number;
+        pendingApprovals: number;
+    };
     [key: string]: unknown;
 }
 

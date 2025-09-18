@@ -1,1 +1,0 @@
-import{j as s}from"./app-DjJX563G.js";import{a as r}from"./createLucideIcon-D933E3G3.js";function i({title:e,description:t,className:a}){return s.jsxs("div",{className:r("mb-8 space-y-0.5",a),children:[s.jsx("h2",{className:"text-xl font-semibold tracking-tight",children:e}),t&&s.jsx("p",{className:"text-muted-foreground text-sm",children:t})]})}export{i as H};

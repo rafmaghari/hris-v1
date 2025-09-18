@@ -35,101 +35,76 @@ export default function UserForm({ user, positions, departments, managers, emplo
         first_name: user?.first_name ?? '',
         last_name: user?.last_name ?? '',
         email: user?.email ?? '',
-        password: '',
         position_id: user?.position_id?.toString() ?? '',
         department_id: user?.department_id?.toString() ?? '',
         manager_id: user?.manager_id?.toString() ?? '',
-        date_hired: user?.date_hired ? new Date(user.date_hired).toISOString().split('T')[0] : '',
+        date_hired: user?.date_hired ?? '',
         employment_type: user?.employment_type ?? '',
-        status: user?.status ?? 1,
-        end_at: user?.end_at ? new Date(user.end_at).toISOString().split('T')[0] : '',
+        status: user?.status?.toString() ?? '',
+        end_at: user?.end_at ?? '',
         roles: user?.roles ?? [],
     });
 
-    function handleSubmit(e: React.FormEvent) {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+
         if (user) {
             put(route('users.update', user.id));
         } else {
             post(route('users.store'));
         }
-    }
+    };
 
-    const handleRoleChange = (roleId: number) => {
-        const currentRoles = Array.isArray(data.roles) ? [...data.roles] : [];
-        const index = currentRoles.indexOf(roleId);
-
-        if (index > -1) {
-            currentRoles.splice(index, 1);
+    const handleRoleChange = (roleId: number, checked: boolean) => {
+        if (checked) {
+            setData('roles', [...data.roles, roleId]);
         } else {
-            currentRoles.push(roleId);
+            setData(
+                'roles',
+                data.roles.filter((id) => id !== roleId),
+            );
         }
+    };
 
-        setData('roles', currentRoles);
+    const handleInputChange = (field: string) => (e: ChangeEvent<HTMLInputElement>) => {
+        setData(field as any, e.target.value);
     };
 
     return (
         <form onSubmit={handleSubmit}>
-            <Card>
+            <Card className="max-w-6xl">
                 <CardHeader>
                     <CardTitle>{user ? 'Edit User' : 'Create User'}</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <Label htmlFor="first_name">First Name</Label>
-                            <Input
-                                id="first_name"
-                                value={data.first_name}
-                                onChange={(e: ChangeEvent<HTMLInputElement>) => setData('first_name', e.target.value)}
-                                className={errors.first_name ? 'border-red-500' : ''}
-                            />
-                            {errors.first_name && <p className="mt-1 text-sm text-red-500">{errors.first_name}</p>}
+                <CardContent className="space-y-6">
+                    {/* Personal Information */}
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div className="space-y-2">
+                            <Label htmlFor="first_name">First Name *</Label>
+                            <Input id="first_name" value={data.first_name} onChange={handleInputChange('first_name')} required />
+                            {errors.first_name && <p className="text-destructive text-sm">{errors.first_name}</p>}
                         </div>
-                        <div>
-                            <Label htmlFor="last_name">Last Name</Label>
-                            <Input
-                                id="last_name"
-                                value={data.last_name}
-                                onChange={(e: ChangeEvent<HTMLInputElement>) => setData('last_name', e.target.value)}
-                                className={errors.last_name ? 'border-red-500' : ''}
-                            />
-                            {errors.last_name && <p className="mt-1 text-sm text-red-500">{errors.last_name}</p>}
+
+                        <div className="space-y-2">
+                            <Label htmlFor="last_name">Last Name *</Label>
+                            <Input id="last_name" value={data.last_name} onChange={handleInputChange('last_name')} required />
+                            {errors.last_name && <p className="text-destructive text-sm">{errors.last_name}</p>}
                         </div>
                     </div>
 
-                    <div>
-                        <Label htmlFor="email">Email</Label>
-                        <Input
-                            id="email"
-                            type="email"
-                            value={data.email}
-                            onChange={(e: ChangeEvent<HTMLInputElement>) => setData('email', e.target.value)}
-                            className={errors.email ? 'border-red-500' : ''}
-                        />
-                        {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
+                    <div className="space-y-2">
+                        <Label htmlFor="email">Email *</Label>
+                        <Input id="email" type="email" value={data.email} onChange={handleInputChange('email')} required />
+                        {errors.email && <p className="text-destructive text-sm">{errors.email}</p>}
                     </div>
 
-                    {!user && (
-                        <div>
-                            <Label htmlFor="password">Password</Label>
-                            <Input
-                                id="password"
-                                type="password"
-                                value={data.password}
-                                onChange={(e: ChangeEvent<HTMLInputElement>) => setData('password', e.target.value)}
-                                className={errors.password ? 'border-red-500' : ''}
-                            />
-                            {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password}</p>}
-                        </div>
-                    )}
-
-                    <div className="grid grid-cols-2 gap-4">
-                        <div>
+                    {/* Employment Information */}
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div className="space-y-2">
                             <Label htmlFor="position_id">Position</Label>
                             <Select value={data.position_id} onValueChange={(value) => setData('position_id', value)}>
-                                <SelectTrigger className={errors.position_id ? 'border-red-500' : ''}>
-                                    <SelectValue placeholder="Select Position" />
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select position" />
                                 </SelectTrigger>
                                 <SelectContent>
                                     {positions.map((position) => (
@@ -139,13 +114,14 @@ export default function UserForm({ user, positions, departments, managers, emplo
                                     ))}
                                 </SelectContent>
                             </Select>
-                            {errors.position_id && <p className="mt-1 text-sm text-red-500">{errors.position_id}</p>}
+                            {errors.position_id && <p className="text-destructive text-sm">{errors.position_id}</p>}
                         </div>
-                        <div>
+
+                        <div className="space-y-2">
                             <Label htmlFor="department_id">Department</Label>
                             <Select value={data.department_id} onValueChange={(value) => setData('department_id', value)}>
-                                <SelectTrigger className={errors.department_id ? 'border-red-500' : ''}>
-                                    <SelectValue placeholder="Select Department" />
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select department" />
                                 </SelectTrigger>
                                 <SelectContent>
                                     {departments.map((department) => (
@@ -155,16 +131,16 @@ export default function UserForm({ user, positions, departments, managers, emplo
                                     ))}
                                 </SelectContent>
                             </Select>
-                            {errors.department_id && <p className="mt-1 text-sm text-red-500">{errors.department_id}</p>}
+                            {errors.department_id && <p className="text-destructive text-sm">{errors.department_id}</p>}
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
-                        <div>
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div className="space-y-2">
                             <Label htmlFor="manager_id">Manager</Label>
                             <Select value={data.manager_id} onValueChange={(value) => setData('manager_id', value)}>
-                                <SelectTrigger className={errors.manager_id ? 'border-red-500' : ''}>
-                                    <SelectValue placeholder="Select Manager" />
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select manager" />
                                 </SelectTrigger>
                                 <SelectContent>
                                     {managers.map((manager) => (
@@ -174,27 +150,22 @@ export default function UserForm({ user, positions, departments, managers, emplo
                                     ))}
                                 </SelectContent>
                             </Select>
-                            {errors.manager_id && <p className="mt-1 text-sm text-red-500">{errors.manager_id}</p>}
+                            {errors.manager_id && <p className="text-destructive text-sm">{errors.manager_id}</p>}
                         </div>
-                        <div>
+
+                        <div className="space-y-2">
                             <Label htmlFor="date_hired">Date Hired</Label>
-                            <Input
-                                id="date_hired"
-                                type="date"
-                                value={data.date_hired}
-                                onChange={(e: ChangeEvent<HTMLInputElement>) => setData('date_hired', e.target.value)}
-                                className={errors.date_hired ? 'border-red-500' : ''}
-                            />
-                            {errors.date_hired && <p className="mt-1 text-sm text-red-500">{errors.date_hired}</p>}
+                            <Input id="date_hired" type="date" value={data.date_hired} onChange={handleInputChange('date_hired')} />
+                            {errors.date_hired && <p className="text-destructive text-sm">{errors.date_hired}</p>}
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
-                        <div>
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div className="space-y-2">
                             <Label htmlFor="employment_type">Employment Type</Label>
                             <Select value={data.employment_type} onValueChange={(value) => setData('employment_type', value)}>
-                                <SelectTrigger className={errors.employment_type ? 'border-red-500' : ''}>
-                                    <SelectValue placeholder="Select Employment Type" />
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select employment type" />
                                 </SelectTrigger>
                                 <SelectContent>
                                     {employmentTypes.map((type) => (
@@ -204,63 +175,57 @@ export default function UserForm({ user, positions, departments, managers, emplo
                                     ))}
                                 </SelectContent>
                             </Select>
-                            {errors.employment_type && <p className="mt-1 text-sm text-red-500">{errors.employment_type}</p>}
+                            {errors.employment_type && <p className="text-destructive text-sm">{errors.employment_type}</p>}
                         </div>
-                        <div>
+
+                        <div className="space-y-2">
                             <Label htmlFor="status">Status</Label>
-                            <Select value={String(data.status)} onValueChange={(value) => setData('status', Number(value))}>
-                                <SelectTrigger className="w-full">
+                            <Select value={data.status} onValueChange={(value) => setData('status', value)}>
+                                <SelectTrigger>
                                     <SelectValue placeholder="Select status" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {[
-                                        { value: 1, label: 'Active' },
-                                        { value: 2, label: 'Inactive' },
-                                    ].map((option) => (
-                                        <SelectItem key={option.value} value={String(option.value)}>
-                                            {option.label}
+                                    {statuses.map((status) => (
+                                        <SelectItem key={status.value} value={status.value}>
+                                            {status.label}
                                         </SelectItem>
                                     ))}
                                 </SelectContent>
                             </Select>
-                            {errors.status && <p className="mt-1 text-sm text-red-500">{errors.status}</p>}
+                            {errors.status && <p className="text-destructive text-sm">{errors.status}</p>}
                         </div>
                     </div>
 
-                    <div>
+                    <div className="space-y-2">
                         <Label htmlFor="end_at">End Date</Label>
-                        <Input
-                            id="end_at"
-                            type="date"
-                            value={data.end_at}
-                            onChange={(e: ChangeEvent<HTMLInputElement>) => setData('end_at', e.target.value)}
-                            className={errors.end_at ? 'border-red-500' : ''}
-                        />
-                        {errors.end_at && <p className="mt-1 text-sm text-red-500">{errors.end_at}</p>}
+                        <Input id="end_at" type="date" value={data.end_at} onChange={handleInputChange('end_at')} />
+                        {errors.end_at && <p className="text-destructive text-sm">{errors.end_at}</p>}
                     </div>
 
-                    <div>
+                    {/* Roles */}
+                    <div className="space-y-3">
                         <Label>Roles</Label>
-                        <div className="mt-2 grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
                             {roles.map((role) => (
                                 <div key={role.id} className="flex items-center space-x-2">
                                     <Checkbox
                                         id={`role-${role.id}`}
-                                        checked={data.roles?.includes(role.id)}
-                                        onCheckedChange={() => handleRoleChange(role.id)}
+                                        checked={data.roles.includes(role.id)}
+                                        onCheckedChange={(checked) => handleRoleChange(role.id, !!checked)}
                                     />
-                                    <Label htmlFor={`role-${role.id}`} className="cursor-pointer text-sm font-normal">
+                                    <Label htmlFor={`role-${role.id}`} className="text-sm">
                                         {role.name}
                                     </Label>
                                 </div>
                             ))}
                         </div>
-                        {errors.roles && <p className="mt-1 text-sm text-red-500">{errors.roles}</p>}
+                        {errors.roles && <p className="text-destructive text-sm">{errors.roles}</p>}
                     </div>
                 </CardContent>
-                <CardFooter>
+                <CardFooter className="flex justify-between">
+                    <div></div>
                     <Button type="submit" disabled={processing}>
-                        {user ? 'Update' : 'Create'} User
+                        {processing ? 'Saving...' : user ? 'Update User' : 'Create User'}
                     </Button>
                 </CardFooter>
             </Card>

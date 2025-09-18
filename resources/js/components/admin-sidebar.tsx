@@ -6,15 +6,20 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, Sid
 import { useIsMobile } from '@/hooks/use-mobile';
 import { type NavItem, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { Briefcase, Building, Calendar, LayoutGrid, Shield, Users } from 'lucide-react';
+import { Briefcase, Building, Calendar, LayoutGrid, Shield, UserCog, Users } from 'lucide-react';
 import { route } from 'ziggy-js';
 
-const adminNavItems: NavItem[] = [
+// Dashboard navigation
+const dashboardNavItems: NavItem[] = [
     {
         title: 'Dashboard',
         href: route('dashboard'),
         icon: LayoutGrid,
     },
+];
+
+// User management navigation
+const userManagementNavItems: NavItem[] = [
     {
         title: 'Users',
         href: route('users.index'),
@@ -30,6 +35,10 @@ const adminNavItems: NavItem[] = [
         href: route('permissions.index'),
         icon: Shield,
     },
+];
+
+// Organization management navigation
+const organizationNavItems: NavItem[] = [
     {
         title: 'Positions',
         href: route('positions.index'),
@@ -40,10 +49,24 @@ const adminNavItems: NavItem[] = [
         href: route('departments.index'),
         icon: Building,
     },
+];
+
+// Leave management navigation
+const leaveManagementNavItems: NavItem[] = [
     {
         title: 'Leave Types',
         href: route('leave-types.index'),
         icon: Calendar,
+    },
+    {
+        title: 'Leave Settings Templates',
+        href: route('leave-settings-templates.index'),
+        icon: Calendar,
+    },
+    {
+        title: 'User Leave Settings',
+        href: route('user-leave-settings.index'),
+        icon: UserCog,
     },
 ];
 
@@ -68,7 +91,10 @@ export function AdminSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavGroup items={adminNavItems} title="Admin" />
+                <NavGroup items={dashboardNavItems} title="Overview" />
+                <NavGroup items={userManagementNavItems} title="User Management" />
+                <NavGroup items={organizationNavItems} title="Organization" />
+                <NavGroup items={leaveManagementNavItems} title="Leave Management" />
             </SidebarContent>
 
             <SidebarFooter>

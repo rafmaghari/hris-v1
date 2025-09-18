@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -8,6 +7,7 @@ use App\Enums\Status;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -19,7 +19,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable implements HasMedia, JWTSubject
 {
@@ -67,11 +66,11 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-            'date_hired' => 'date',
-            'end_at' => 'date',
-            'employment_type' => EmploymentType::class,
-            'status' => Status::class,
+            'password'          => 'hashed',
+            'date_hired'        => 'date',
+            'end_at'            => 'date',
+            'employment_type'   => EmploymentType::class,
+            'status'            => Status::class,
         ];
     }
 
@@ -84,7 +83,7 @@ class User extends Authenticatable implements HasMedia, JWTSubject
 
         static::creating(function ($user) {
             if (empty($user->system_user_id)) {
-                $user->system_user_id = 'system|'.Str::random(20);
+                $user->system_user_id = 'system|' . Str::random(20);
             }
         });
     }
@@ -124,7 +123,7 @@ class User extends Authenticatable implements HasMedia, JWTSubject
      */
     public function getAvatarUrlAttribute(): string
     {
-        return $this->getFirstMediaUrl('avatar') ?: 'https://ui-avatars.com/api/?name='.urlencode($this->name).'&color=7F9CF5&background=EBF4FF';
+        return $this->getFirstMediaUrl('avatar') ?: 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&color=7F9CF5&background=EBF4FF';
     }
 
     /**
@@ -132,7 +131,7 @@ class User extends Authenticatable implements HasMedia, JWTSubject
      */
     public function getAvatarThumbUrlAttribute(): string
     {
-        return $this->getFirstMediaUrl('avatar', 'thumb') ?: 'https://ui-avatars.com/api/?name='.urlencode($this->name).'&color=7F9CF5&background=EBF4FF&size=100';
+        return $this->getFirstMediaUrl('avatar', 'thumb') ?: 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&color=7F9CF5&background=EBF4FF&size=100';
     }
 
     /**
@@ -251,6 +250,14 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     public function subordinates(): HasMany
     {
         return $this->hasMany(User::class, 'manager_id');
+    }
+
+    /**
+     * Get the leave settings for this user.
+     */
+    public function leaveSettings(): HasMany
+    {
+        return $this->hasMany(UserLeaveSetting::class);
     }
 
     /**

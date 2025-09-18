@@ -1,17 +1,18 @@
 <?php
 
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\LeaveSettingsTemplateController;
+use App\Http\Controllers\LeaveTypeController;
 use App\Http\Controllers\MenuBuilderController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PlatformController;
+use App\Http\Controllers\PositionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Http\Controllers\PositionController;
-use App\Http\Controllers\DepartmentController;
-use App\Http\Controllers\LeaveTypeController;
 
 // Admin routes with caravea_admin role
 Route::prefix('admin')->middleware(['auth', 'verified', 'role:super_admin'])->group(function () {
@@ -41,7 +42,6 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role:super_admin'])->gr
     Route::resource('leave-types', LeaveTypeController::class);
     Route::resource('users', UserController::class);
 
-
     // Menu Builder routes
     Route::get('menu-builder', [MenuBuilderController::class, 'index'])
         ->name('menu-builder.index');
@@ -65,4 +65,7 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role:super_admin'])->gr
     // Direct access route
     Route::post('users/{user}/direct-access', [UserController::class, 'updateDirectAccess'])
         ->name('users.direct-access');
+
+    // Leave Request Routes
+    Route::resource('leave-settings-templates', LeaveSettingsTemplateController::class);
 });

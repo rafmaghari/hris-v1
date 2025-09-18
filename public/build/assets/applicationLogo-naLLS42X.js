@@ -1,0 +1,1 @@
+import{j as p}from"./app-3Ds5Ugas.js";const s=({className:o,variant:t="light"})=>{const i=t==="light"?"/icons/hpci-logo-white.png":"/icons/hpci-logo.png";return p.jsx("img",{src:i,alt:"App Logo",className:o})};export{s as A};
