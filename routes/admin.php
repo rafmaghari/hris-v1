@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\LeaveSettingsTemplateController;
 use App\Http\Controllers\LeaveTypeController;
@@ -12,13 +13,10 @@ use App\Http\Controllers\PositionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 // Admin routes with caravea_admin role
 Route::prefix('admin')->middleware(['auth', 'verified', 'role:super_admin'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('admin.dashboard');
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
     // Platform Menu Routes
     Route::get('/platforms/{platform}/menus', [MenuController::class, 'index'])

@@ -1,10 +1,9 @@
 <?php
-
 namespace App\Models;
 
 use App\Enums\OvertimeStatus;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class OvertimeRequest extends Model
@@ -18,15 +17,15 @@ class OvertimeRequest extends Model
         'total_hours',
         'status',
         'approver_note',
-        'approved_at'
+        'approved_at',
     ];
 
     protected $casts = [
-        'date' => 'date',
-        'start_time' => 'datetime',
-        'end_time' => 'datetime',
+        'date'        => 'date:Y-m-d',
+        'start_time'  => 'datetime',
+        'end_time'    => 'datetime',
         'total_hours' => 'decimal:2',
-        'status' => OvertimeStatus::class,
+        'status'      => OvertimeStatus::class,
         'approved_at' => 'datetime',
     ];
 

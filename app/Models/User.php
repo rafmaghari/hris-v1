@@ -67,8 +67,8 @@ class User extends Authenticatable implements HasMedia, JWTSubject
         return [
             'email_verified_at' => 'datetime',
             'password'          => 'hashed',
-            'date_hired'        => 'date',
-            'end_at'            => 'date',
+            'date_hired'        => 'date:Y-m-d',
+            'end_at'            => 'date:Y-m-d',
             'employment_type'   => EmploymentType::class,
             'status'            => Status::class,
         ];

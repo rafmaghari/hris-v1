@@ -16,7 +16,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Regular user routes with app prefix
     Route::prefix('app')->group(function () {
-        // Route::get('dashboard', [DashboardController::class, 'index'])->name('app.dashboard');
+        Route::get('dashboard', [DashboardController::class, 'index'])->name('app.dashboard');
 
         // Add other regular user routes here
     });

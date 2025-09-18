@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head, useForm } from '@inertiajs/react';
+import { Head, useForm, usePage } from '@inertiajs/react';
 import { format } from 'date-fns';
 import { useState } from 'react';
 import { getStatusColor, getStatusLabel, OvertimeRequest } from './Index';
@@ -32,6 +32,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Show({ overtimeRequest, canApprove }: Props) {
+    const { auth } = usePage<{ auth: { user: { id: number } } }>().props;
     const [isApproveDialogOpen, setIsApproveDialogOpen] = useState(false);
     const [isRejectDialogOpen, setIsRejectDialogOpen] = useState(false);
 
@@ -142,7 +143,7 @@ export default function Show({ overtimeRequest, canApprove }: Props) {
                                         </Button>
                                     </>
                                 )}
-                                {overtimeRequest.user.id === (window as any).auth.user.id && (
+                                {overtimeRequest.user.id === auth.user.id && (
                                     <Button variant="outline" onClick={handleCancel}>
                                         Cancel Request
                                     </Button>
