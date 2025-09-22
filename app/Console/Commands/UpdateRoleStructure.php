@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Console\Commands;
 
 use App\Models\User;
@@ -20,7 +19,7 @@ class UpdateRoleStructure extends Command
      *
      * @var string
      */
-    protected $description = 'Update roles structure to include hpci_admin role';
+    protected $description = 'Update roles structure to include caravea_admin role';
 
     /**
      * Execute the console command.
@@ -29,25 +28,25 @@ class UpdateRoleStructure extends Command
     {
         $this->info('Updating role structure...');
 
-        // Check if hpci_admin role exists, create if not
-        $hpci_admin_role = Role::where('name', '')->first();
-        if (! $hpci_admin_role) {
-            $hpci_admin_role = Role::create(['name' => 'hpci_admin']);
-            $this->info('Created hpci_admin role');
+        // Check if caravea_admin role exists, create if not
+        $caravea_admin_role = Role::where('name', 'caravea_admin')->first();
+        if (! $caravea_admin_role) {
+            $caravea_admin_role = Role::create(['name' => 'caravea_admin']);
+            $this->info('Created caravea_admin role');
         }
 
-        // Get all users with admin role and assign hpci_admin role
+        // Get all users with admin role and assign caravea_admin role
         $adminUsers = User::role('admin')->get();
-        $count = 0;
+        $count      = 0;
 
         foreach ($adminUsers as $user) {
-            if (! $user->hasRole('hpci_admin')) {
-                $user->assignRole('hpci_admin');
+            if (! $user->hasRole('caravea_admin')) {
+                $user->assignRole('caravea_admin');
                 $count++;
             }
         }
 
-        $this->info("Updated $count users with hpci_admin role");
+        $this->info("Updated $count users with caravea_admin role");
         $this->info('Role structure update complete');
 
         return Command::SUCCESS;

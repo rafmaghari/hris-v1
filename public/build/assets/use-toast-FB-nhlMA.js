@@ -1,1 +1,0 @@
-import{t}from"./app-3Ds5Ugas.js";function o({title:s,description:r,action:e,variant:u}){return t(s,{description:r,action:e,className:u==="destructive"?"bg-destructive text-destructive-foreground":void 0})}function c(){return{toast:o,dismiss:t.dismiss,error:s=>t.error(s),success:s=>t.success(s)}}export{o as t,c as u};

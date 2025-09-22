@@ -1,0 +1,1 @@
+import{j as g}from"./app-C84IgD_F.js";const s=({className:o,variant:t="light"})=>{const a=t==="light"?"/icons/caravea-logo-white.png":"/icons/caravea-logo.png";return g.jsx("img",{src:a,alt:"App Logo",className:o})};export{s as A};
